@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "bakuretsu!";
+}
+
+<div class="jumbotron">
+    <h1>EKUSPUROSION</h1>
+    <p class="lead">Upload your stuff</p>
+    <p><a href="https://youtu.be/vtsmlbQgdNk" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+@{
+    if (ViewBag.Error)
+    {
+        <div>
+            <h2>@ViewBag.ErrorMessage</h2>
+        </div>
+    }
+    else if (ViewBag.Uploaded)
+    {
+<div>
+    <h2>File @ViewBag.Message uploaded!</h2>
+    <p>Here's the link to your file: INSERT LINK FROM API HERE</p>
+</div>
+    }
+}
+
+<div class="uploader">
+    <h2>Put your thing here:</h2>
+    @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div>
+            @Html.TextBox("file", "", new { type="file" }) <br />
+            <input type="submit" id="Submit" value="Upload" />
+        </div>
+    }
+</div>
