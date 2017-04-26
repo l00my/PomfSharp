@@ -18,8 +18,6 @@ namespace PomfSharp.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "A clone of pomf.se <INSERT GITHUB LINK TO POMF HERE> that I created to practice with various things.";
-
             return View();
         }
 
@@ -37,6 +35,15 @@ namespace PomfSharp.Controllers
             {
                 ViewBag.Error = false;
                 ViewBag.Uploaded = false;
+
+                var maxFileSize = 50 * 100000;
+
+                if (file.ContentLength > maxFileSize)
+                {
+                    ViewBag.Error = true;
+                    ViewBag.ErrorMessage = $"File is too large!";
+                    return View("Index");
+                }
 
                 var uploadedFilePath = @"C:\temp\UploadedFiles";
                 var uploadManager = new UploadManager();

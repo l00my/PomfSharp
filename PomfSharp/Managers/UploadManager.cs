@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -25,10 +26,62 @@ namespace PomfSharp.Managers
         {
             if (file.ContentLength > 0)
             {
-                string newFileName = GenerateUniqueFileName(file.FileName);
-                var fileLocation = Path.Combine(path, newFileName);
-                file.SaveAs(fileLocation);
+                var fileHash = string.Empty;
+                var newFileName = GenerateUniqueFileName(file.FileName);
+                var tempLocation = Path.Combine("C:\\temp\\", newFileName);
+                file.SaveAs(tempLocation);
+                using (var tempFile = File.OpenRead(tempLocation))
+                {
+                    if (CheckFileIsUnique(tempFile, ref fileHash))
+                    {
+                        var fileLocation = Path.Combine(path, newFileName);
+                        SaveFile(file, newFileName, fileLocation, fileHash, tempLocation);
+                    }
+                    else
+                    {
+                        File.Delete(tempLocation);
+                    }
+                }
             }
+        }
+
+        private bool CheckFileIsUnique(FileStream file, ref string fileHash)
+        {
+            using (file)
+            {
+                var sha = new SHA256Managed();
+                byte[] hashArray = sha.ComputeHash(file);
+                fileHash = BitConverter.ToString(hashArray).Replace("-", string.Empty);
+                //file.Position = 0;
+
+                return CheckFileHashExists(fileHash);
+            }
+        }
+
+        private bool CheckFileHashExists(string hash)
+        {
+            var uploadedFilesCollection = _pomfSharpDatabase.GetCollection<BsonDocument>("uploadedFiles");
+            var filter = Builders<BsonDocument>.Filter.Eq("hash", hash);
+            return uploadedFilesCollection.Find(filter).ToList().Count == 0;
+        }
+
+        private void SaveFile(HttpPostedFileBase file, string fileName, string fileLocation, string fileHash, string tempLocation)
+        {
+            var uploadedFilesCollection = _pomfSharpDatabase.GetCollection<BsonDocument>("uploadedFiles");
+
+            var nameSplit = fileName.Split('.');
+            var id = nameSplit[0];
+            var document = new BsonDocument
+            {
+                {"id",  id},
+                {"name", fileName },
+                {"location", fileLocation },
+                {"hash", fileHash }
+            };
+
+            uploadedFilesCollection.InsertOne(document);
+
+            File.Move(tempLocation, fileLocation);
         }
 
         private static string GenerateUniqueFileName(string fileName)
