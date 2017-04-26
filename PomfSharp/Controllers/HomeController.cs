@@ -9,6 +9,9 @@ namespace PomfSharp.Controllers
 {
     public class HomeController : Controller
     {
+        private string[] fileTypeWhitelist = { "image/png", "image/jpeg", "image/gif", "video/webm", "video/mp4" };
+        private int maxFileSize = 50 * 100000;
+
         public ActionResult Index()
         {
             ViewBag.Uploaded = false;
@@ -36,7 +39,12 @@ namespace PomfSharp.Controllers
                 ViewBag.Error = false;
                 ViewBag.Uploaded = false;
 
-                var maxFileSize = 50 * 100000;
+                if (!fileTypeWhitelist.Contains(file.ContentType))
+                {
+                    ViewBag.Error = true;
+                    ViewBag.ErrorMessage = $"File type not allowed!";
+                    return View("Index");
+                }
 
                 if (file.ContentLength > maxFileSize)
                 {
