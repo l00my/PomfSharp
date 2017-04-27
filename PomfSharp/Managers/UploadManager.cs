@@ -22,13 +22,13 @@ namespace PomfSharp.Managers
             _pomfSharpDatabase = _mongoClient.GetDatabase("PomfSharp");
         }
 
-        public void UploadFile(HttpPostedFileBase file, string path)
+        public void UploadFile(HttpPostedFileBase file, string path, string tempPath)
         {
             if (file.ContentLength > 0)
             {
                 var fileHash = string.Empty;
                 var newFileName = GenerateUniqueFileName(file.FileName);
-                var tempLocation = Path.Combine("C:\\temp\\", newFileName);
+                var tempLocation = Path.Combine(tempPath, newFileName);
                 file.SaveAs(tempLocation);
                 using (var tempFile = File.OpenRead(tempLocation))
                 {
@@ -73,9 +73,10 @@ namespace PomfSharp.Managers
             var id = nameSplit[0];
             var document = new BsonDocument
             {
-                {"id",  id},
+                {"fileid",  id},
                 {"name", fileName },
                 {"location", fileLocation },
+                {"type",  file.ContentType},
                 {"hash", fileHash }
             };
 

@@ -2,8 +2,18 @@
     ViewBag.Title = "Rain, rain, rain...";
 }
 <html>
-    <head></head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title</title>
+    </head>
     <body>
+        @{
+            if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <pre style="word-wrap: break-word; white-space: pre-wrap; font-weight: bold; font-family: Consolas">@ViewBag.ErrorMessage</pre><br />
+            }
+        }
         <pre style="word-wrap: break-word; white-space: pre-wrap; font-weight: bold; font-family: Consolas">
             /:::
             ;  ':/. _

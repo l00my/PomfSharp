@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = ViewBag.FileId;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    @{
+        if (ViewBag.VideoType)
+        {
+            <video src="@ViewBag.FileLocation" autoplay controls loop></video>
+        }
+        else
+        {
+            <img src="@ViewBag.FileLocation" />
+        }
+    }
+</body>
+</html>
