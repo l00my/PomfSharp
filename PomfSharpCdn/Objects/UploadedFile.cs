@@ -8,6 +8,7 @@ namespace PomfSharpCdn.Objects
         public string fileid { get; set; }
         public string name { get; set; }
         public string location { get; set; }
+        public string mappedlocation { get; set; }
         public string type { get; set; }
         public string hash { get; set; }
     }

@@ -33,7 +33,7 @@ namespace PomfSharpCdn.Managers
                 {
                     FileId = "nope",
                     Name = "nope",
-                    Location = "nope",
+                    MappedLocation = "nope",
                     Type = "nope"
                 };
             }
@@ -56,7 +56,7 @@ namespace PomfSharpCdn.Managers
             {
                 FileId = file.fileid,
                 Name = file.name,
-                Location = file.location,
+                MappedLocation = file.mappedlocation,
                 Type = file.type
             };
         }

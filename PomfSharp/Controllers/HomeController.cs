@@ -53,7 +53,7 @@ namespace PomfSharp.Controllers
                     return View("Index");
                 }
 
-                var uploadedFilePath = Server.MapPath("~/Upload/complete");
+                var uploadedFilePath = Server.MapPath("~/Upload/completed");
                 var tempFilePath = Server.MapPath("~/Upload/temp");
                 var uploadManager = new UploadManager();
                 uploadManager.UploadFile(file, uploadedFilePath, tempFilePath);

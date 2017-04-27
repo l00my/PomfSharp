@@ -29,7 +29,7 @@ namespace PomfSharpCdn.Controllers
                 var fileManager = new FileManager();
                 var fileDto = fileManager.GetFileData(id);
 
-                if (fileDto.Location.Equals("nope"))
+                if (fileDto.MappedLocation.Equals("nope"))
                 {
                     ViewBag.ErrorMessage = "Could not find file! >///<";
                     return View("Index");
@@ -39,9 +39,14 @@ namespace PomfSharpCdn.Controllers
                 {
                     ViewBag.VideoType = true;
                 }
+                else
+                {
+                    ViewBag.VideoType = false;
+                }
 
                 ViewBag.FileId = fileDto.FileId;
-                ViewBag.FileLocation = fileDto.Location;
+                ViewBag.FileLocation = fileDto.MappedLocation;
+                ViewBag.FileType = fileDto.Type;
 
                 return View();
             }

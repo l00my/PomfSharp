@@ -14,7 +14,9 @@
     @{
         if (ViewBag.VideoType)
         {
-            <video src="@ViewBag.FileLocation" autoplay controls loop></video>
+            <video autoplay controls loop>
+                <source src="@ViewBag.FileLocation" type="@ViewBag.FileType"/>
+            </video>
         }
         else
         {

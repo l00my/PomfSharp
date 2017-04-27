@@ -35,7 +35,8 @@ namespace PomfSharp.Managers
                     if (CheckFileIsUnique(tempFile, ref fileHash))
                     {
                         var fileLocation = Path.Combine(path, newFileName);
-                        SaveFile(file, newFileName, fileLocation, fileHash, tempLocation);
+                        var mappedLocation = $"Upload/completed/{newFileName}";
+                        SaveFile(file, newFileName, fileLocation, fileHash, tempLocation, mappedLocation);
                     }
                     else
                     {
@@ -65,7 +66,7 @@ namespace PomfSharp.Managers
             return uploadedFilesCollection.Find(filter).ToList().Count == 0;
         }
 
-        private void SaveFile(HttpPostedFileBase file, string fileName, string fileLocation, string fileHash, string tempLocation)
+        private void SaveFile(HttpPostedFileBase file, string fileName, string fileLocation, string fileHash, string tempLocation, string mappedLocation)
         {
             var uploadedFilesCollection = _pomfSharpDatabase.GetCollection<BsonDocument>("uploadedFiles");
 
@@ -76,6 +77,7 @@ namespace PomfSharp.Managers
                 {"fileid",  id},
                 {"name", fileName },
                 {"location", fileLocation },
+                {"mappedlocation", mappedLocation},
                 {"type",  file.ContentType},
                 {"hash", fileHash }
             };
